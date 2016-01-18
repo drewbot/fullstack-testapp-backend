@@ -28,40 +28,40 @@ var noteSchema = new mongoose.Schema({
 // So inside our emberData database there will be a notes collection
 var NoteModel = mongoose.model('note', noteSchema);
 
-// create some test data documents and place them in the notes collection in MongoDB
-var testNoteOne = NoteModel({
-  title: 'Test Note 1',
-  content: 'Lorem ipsum dolor sit amet',
-  author: 'Jim Jest'
-});
-
-var testNoteTwo = NoteModel({
-  title: 'Test Note 2',
-  content: 'Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  author: 'Jim Jest'
-});
-
-var testNoteThree = NoteModel({
-  title: 'Test Note 3',
-  content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-  author: 'Jim Jest'
-});
-
-// Save to MongoDB
-testNoteOne.save(function(err) {
-  if (err) throw err;
-  console.log('Note 1 saved');
-});
-
-testNoteTwo.save(function(err) {
-  if (err) throw err;
-  console.log('Note 2 saved');
-});
-
-testNoteThree.save(function(err) {
-  if (err) throw err;
-  console.log('Note 3 saved');
-});
+// // create some test data documents and place them in the notes collection in MongoDB
+// var testNoteOne = NoteModel({
+//   title: 'Test Note 1',
+//   content: 'Lorem ipsum dolor sit amet',
+//   author: 'Jim Jest'
+// });
+//
+// var testNoteTwo = NoteModel({
+//   title: 'Test Note 2',
+//   content: 'Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+//   author: 'Jim Jest'
+// });
+//
+// var testNoteThree = NoteModel({
+//   title: 'Test Note 3',
+//   content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+//   author: 'Jim Jest'
+// });
+//
+// // Save to MongoDB
+// testNoteOne.save(function(err) {
+//   if (err) throw err;
+//   console.log('Note 1 saved');
+// });
+//
+// testNoteTwo.save(function(err) {
+//   if (err) throw err;
+//   console.log('Note 2 saved');
+// });
+//
+// testNoteThree.save(function(err) {
+//   if (err) throw err;
+//   console.log('Note 3 saved');
+// });
 
 // just placeholder content for root route
 app.use('/', function(req, res, next) {
@@ -79,10 +79,14 @@ app.get('/api/',function(req,res) {
 app.get('/api/notes', function(req,res) {
 	NoteModel.find({},function(err,docs) {
 		if(err) {
-			res.send(err);
+      // using object syntax as this is how ember data expects it to be formatted
+			res.send({error: err});
+      // res.send(err);
 		}
 		else {
-			res.send(docs);
+      // 'note' is the name of the model to be created in ember and 'docs' is an array of returned documents
+			res.send({note: docs});
+      // res.send(docs);
 		}
 	});
 });
